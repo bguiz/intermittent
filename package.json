@@ -1,0 +1,24 @@
+{
+  "name": "intermittent",
+  "version": "0.0.0",
+  "description": "Runs a thing intermittently",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha -u bdd -R spec"
+  },
+  "keywords": [
+    "intermittent",
+    "time",
+    "task"
+  ],
+  "author": "bguiz",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^5.3.0",
+    "mocha": "^2.5.3"
+  },
+  "dependencies": {
+    "co": "^4.6.0"
+  }
+}
