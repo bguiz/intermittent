@@ -1,5 +1,7 @@
 'use strict';
 
+const co = require('co');
+
 module.exports = {
   run: runIntermittently,
 };
@@ -26,33 +28,37 @@ function runIntermittently(options) {
     throw 'Must have a thing that is a function';
   }
 
-  // run
+  function delayBeforeNextThing() {
+    return new Promise((resolve) => {
+      let delay = Math.floor(
+        interval - intervalVariance - (2 * Math.random() * intervalVariance)
+      );
+      setTimeout(() => {
+        resolve(true);
+      }, delay);
+    })
+  }
+
   function doNextThing() {
-    return new Promise((resolve, reject) => {
-      console.log('doNextThing');
-      let thinged = thing();
-      if (typeof thinged.then !== 'function') {
-        reject('The thing must return a promise');
-        return;
+    return co(function* () {
+      let result;
+      while (true) {
+        try {
+          result = yield thing();
+        }
+        catch (ex) {
+          //TODO intercept certain exceptions to thorw another type of error
+          throw ex;
+        }
+        if (!result || !result.hasNext) {
+          // Exit point from the while loop here
+          // because it needs to happen between doing thing,
+          // and the delay for the next thing
+          break;
+        }
+        yield delayBeforeNextThing();
       }
-      thinged
-        .then((result) => {
-          console.log('result', result);
-          if (!result.hasNext) {
-            resolve(true);
-            return;
-          }
-          return new Promise((innerResolve) => {
-            let delay = Math.floor(
-              interval - intervalVariance - (2 * Math.random() * intervalVariance)
-            );
-            setTimeout(() => {
-              innerResolve(true);
-            }, delay);
-          })
-          .then(doNextThing);
-        })
-        .catch(reject);
+      return true;
     });
   }
   return doNextThing();
