@@ -1,9 +1,10 @@
 {
   "name": "intermittent",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Runs a thing intermittently",
   "main": "intermittent.js",
   "scripts": {
+    "lint": "eslint .",
     "test": "mocha -u bdd -R spec"
   },
   "keywords": [
@@ -16,6 +17,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-as-promised": "^5.3.0",
+    "eslint": "^2.11.1",
     "mocha": "^2.5.3"
   },
   "dependencies": {
