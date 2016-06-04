@@ -21,6 +21,9 @@ function runIntermittently(options) {
   if (typeof intervalVariance !== 'number') {
     intervalVariance = 0;
   }
+  if (intervalVariance < 0) {
+    throw 'Interval variance must be postive';
+  }
   if (intervalVariance > interval) {
     throw 'Interval variance may not exceed the interval';
   }
@@ -28,41 +31,42 @@ function runIntermittently(options) {
     throw 'Must have a thing that is a function';
   }
 
-  function delayBeforeNextThing() {
-    return new Promise((resolve) => {
-      let delay =
-        (intervalVariance === 0) ?
-        interval :
-        Math.floor(
-          interval - intervalVariance - (2 * Math.random() * intervalVariance)
-        );
-      setTimeout(() => {
-        resolve(true);
-      }, delay);
-    })
-  }
+  return doNextThing(interval, intervalVariance, thing);
+}
 
-  function doNextThing() {
-    return co(function* () {
-      let result;
-      while (true) {
-        try {
-          result = yield thing();
-        }
-        catch (ex) {
-          //TODO intercept certain exceptions to thorw another type of error
-          throw ex;
-        }
-        if (!result || !result.hasNext) {
-          // Exit point from the while loop here
-          // because it needs to happen between doing thing,
-          // and the delay for the next thing
-          break;
-        }
-        yield delayBeforeNextThing();
+function delayBeforeNextThing(interval, intervalVariance) {
+  return new Promise((resolve) => {
+    let delay =
+      (intervalVariance === 0) ?
+      interval :
+      Math.floor(
+        interval - intervalVariance + (2 * Math.random() * intervalVariance)
+      );
+    setTimeout(() => {
+      resolve(true);
+    }, delay);
+  })
+}
+
+function doNextThing(interval, intervalVariance, thing) {
+  return co(function* () {
+    let result;
+    while (true) {
+      try {
+        result = yield thing();
       }
-      return true;
-    });
-  }
-  return doNextThing();
+      catch (ex) {
+        //TODO intercept certain exceptions to thorw another type of error
+        throw ex;
+      }
+      if (!result || !result.hasNext) {
+        // Exit point from the while loop here
+        // because it needs to happen between doing thing,
+        // and the delay for the next thing
+        break;
+      }
+      yield delayBeforeNextThing(interval, intervalVariance);
+    }
+    return true;
+  });
 }

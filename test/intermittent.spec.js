@@ -1,6 +1,6 @@
 'use strict';
 
-const intermittent = require('../index.js');
+const intermittent = require('../intermittent.js');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 
@@ -26,6 +26,17 @@ describe('[intermittent]', () => {
         });
       })
       .to.throw('Must have interval that is number, 1 or more');
+    });
+
+    it('should check that interval variance is positive', () => {
+      expect(() => {
+        intermittent.run({
+          interval: 10,
+          intervalVariance: -1,
+          thing: () => {},
+        });
+      })
+      .to.throw('Interval variance must be postive');
     });
 
     it('should check that interval variance is less than interval itself', () => {
