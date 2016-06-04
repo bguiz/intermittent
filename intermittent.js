@@ -30,9 +30,12 @@ function runIntermittently(options) {
 
   function delayBeforeNextThing() {
     return new Promise((resolve) => {
-      let delay = Math.floor(
-        interval - intervalVariance - (2 * Math.random() * intervalVariance)
-      );
+      let delay =
+        (intervalVariance === 0) ?
+        interval :
+        Math.floor(
+          interval - intervalVariance - (2 * Math.random() * intervalVariance)
+        );
       setTimeout(() => {
         resolve(true);
       }, delay);
