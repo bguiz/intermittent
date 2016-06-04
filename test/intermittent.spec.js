@@ -82,7 +82,7 @@ describe('[intermittent]', () => {
       return expect(intermittent.run({
         interval: 1000,
         thing: () => {
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             resolve({
               hasNext: false,
             });
@@ -97,7 +97,7 @@ describe('[intermittent]', () => {
       return expect(intermittent.run({
         interval: 10,
         thing: () => {
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             --numLeft;
             resolve({
               hasNext: (numLeft !== 0),
@@ -114,7 +114,7 @@ describe('[intermittent]', () => {
         interval: 10,
         intervalVariance: 1,
         thing: () => {
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             --numLeft;
             resolve({
               hasNext: (numLeft !== 0),
