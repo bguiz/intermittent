@@ -5,7 +5,8 @@
   "main": "intermittent.js",
   "scripts": {
     "lint": "eslint .",
-    "test": "mocha -u bdd -R spec"
+    "test": "mocha -u bdd -R spec",
+    "cover": "babel-node ./node_modules/isparta/bin/isparta cover --report text --report html ./node_modules/mocha/bin/_mocha -- --reporter dot"
   },
   "keywords": [
     "intermittent",
@@ -15,9 +16,12 @@
   "author": "bguiz",
   "license": "GPL-3.0",
   "devDependencies": {
+    "babel": "^6.5.2",
     "chai": "^3.5.0",
     "chai-as-promised": "^5.3.0",
     "eslint": "^2.11.1",
+    "isparta": "^4.0.0",
+    "istanbul": "^0.4.3",
     "mocha": "^2.5.3"
   },
   "dependencies": {
