@@ -2,10 +2,60 @@
 
 const co = require('co');
 
+/**
+ * @class  intermittent
+ * @module  intermittent
+ */
 module.exports = {
   run: runIntermittently,
 };
 
+/**
+ * Run something intermittently
+ *
+ * Example usage:
+ *
+ * ```
+ * const intermittent = require('intermittent');
+ * intermittent.run({
+ *   interval: 5000,
+ *   intervalVatiance: 1000,
+ *   thing: myThing,
+ * });
+ * ```
+ *
+ * For a sample implementation of `myThing`, like this:
+ *
+ * ```
+ * let times = 3;
+ * function myThing() {
+ *   return new Promise((resolve) => {
+ *     --times;
+ *     resolve({
+ *       hasNext: (times !== 0),
+ *     });
+ *   });
+ * }
+ * ```
+ *
+ * ... `myThing` would run 3 times,
+ * with a gap of 4 seconds to 6 seconds between each run.
+ *
+ * @method run
+ * @for  intermittent
+ * @param  {Number} interval  Compulsory, positive number of milliseconds to wait
+ *                  between doing one `thing` and the next
+ * @param  {Number} intervalVariance  Optional, positive number of milliseconds
+ *                  to vary the inerval. Actual interval is `interval` plus or minus
+ *                  this `intervalVariance`.
+ * @param  {Function} thing  Compulsory, function of the thing to do one or more times
+ *                    Should return either a value synchronously,
+ *                    or a promise that resolves to a value asyncrhonously.
+ *                    The returned/ resolved value can have a `hasNext` boolean flag,
+ *                    which if `true`, will mean that the `thing` will run again.
+ * @return {Promise}  Rejects on invalid options,
+ *                    or if any `thing` fails
+ */
 function runIntermittently (options) {
   if (!options) {
     throw Error('Must specify options');
