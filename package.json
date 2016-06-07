@@ -18,7 +18,9 @@
   "author": "bguiz",
   "license": "GPL-3.0",
   "devDependencies": {
-    "babel": "^6.5.2",
+    "babel-cli": "^6.9.0",
+    "babel-core": "^6.9.1",
+    "babel-runtime": "^6.9.2",
     "chai": "^3.5.0",
     "chai-as-promised": "^5.3.0",
     "eslint": "^2.11.1",
