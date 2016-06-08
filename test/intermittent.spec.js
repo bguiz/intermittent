@@ -1,6 +1,6 @@
 'use strict';
 
-const intermittent = require('../intermittent.js');
+const intermittent = require('../lib/intermittent.js');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 
