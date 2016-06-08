@@ -18,7 +18,7 @@
   "author": "bguiz",
   "license": "GPL-3.0",
   "devDependencies": {
-    "autodocs": "^0.10.2",
+    "autodocs": "^0.10.3",
     "babel-cli": "^6.9.0",
     "babel-core": "^6.9.1",
     "babel-runtime": "^6.9.2",
